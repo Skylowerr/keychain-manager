@@ -19,10 +19,10 @@ struct ContentView: View {
                 .textFieldStyle(.roundedBorder)
                 .autocapitalization(.none)
                 .keyboardType(.emailAddress)
-
+            
             Button("Save Email") {
-                UserDefaults.standard.set(email, forKey: "ud_email")
-                savedEmail = UserDefaults.standard.string(forKey: "ud_email") ?? ""
+                UserDefaults.standard.set(email, forKey: "ud_email") //telefondaki .plist dosyasına yazar."ud_email" bu verinin etiketi, sonra bu etiketle okuyacaksın
+                savedEmail = UserDefaults.standard.string(forKey:  "ud_email") ?? "" //az önce yazdığımızı geri okuyoruz ve savedEmail'e atıyoruz.
                 email = ""
             }
 
@@ -40,8 +40,7 @@ struct ContentView: View {
                 .textFieldStyle(.roundedBorder)
 
             Button("Save Password") {
-                let success = KeychainManager.shared.save(password, forKey: "kc_password")
-                print("Keychain kayıt: \(success)")  // false gelirse entitlement sorunu
+                KeychainManager.shared.save(password, forKey: "kc_password")
                 savedPassword = KeychainManager.shared.get(forKey: "kc_password") ?? "nil döndü"
                 password = ""
             }
@@ -51,6 +50,7 @@ struct ContentView: View {
             }
         }
         .padding()
+        ///Kullanıcı uygulamayı kapatıp açtığında daha önce kaydettiği veriler kaybolmasın diye var. Olmasaydı her uygulama açılışında ekran boş başlardı — veriler aslında kayıtlı olmasına rağmen.
         .onAppear {
             savedEmail    = UserDefaults.standard.string(forKey: "ud_email") ?? ""
             savedPassword = KeychainManager.shared.get(forKey: "kc_password") ?? ""
